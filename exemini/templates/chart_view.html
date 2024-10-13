@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}SaiiMaiiShop Admin{% endblock title %}
+
+{%  block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Product Chart</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+
+<div class="container mx-auto my-10 p-5 bg-white rounded-xl shadow-md">
+    <h2 class="text-2xl font-semibold mb-5 text-center">จำนวนสินค้าต่อวัน (รายสัปดาห์)</h2>
+    <canvas id="productChart"></canvas>
+</div>
+
+<script>
+    // ดึงข้อมูลจาก Django
+    fetch('/weekly-product-data/')
+        .then(response => response.json())
+        .then(data => {
+            const weeklyData = {
+                labels: data.labels,
+                datasets: [{
+                    label: 'จำนวนสินค้า',
+                    data: data.data, // จำนวนสินค้าต่อวัน
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            const config = {
+                type: 'bar',
+                data: weeklyData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'จำนวนสินค้า'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'วันในสัปดาห์'
+                            }
+                        }
+                    }
+                }
+            };
+
+            const productChart = new Chart(
+                document.getElementById('productChart'),
+                config
+            );
+        })
+        .catch(error => console.error('Error fetching data:', error));
+</script>
+
+</body>
+{% endblock %}

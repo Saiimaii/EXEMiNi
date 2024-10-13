@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+    
+    <div class="bg-white border rounded-lg px-8 py-6 mx-auto my-8 max-w-2xl">
+        <h2 class="text-2xl font-medium mb-4">Pre-order</h2>
+        <form action="/new/" method="POST" class="py-4 px-6">
+                {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="date">
+                        วันที่ต้องการรับของ
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="date" name="date" type="date" placeholder="กรอกวันที่">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="num">
+                    ระบุรหัสสินค้า
+                </label>
+                <select
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="num" name="num">
+                    <option value="">รหัสสินค้า</option>
+                    <option value="SM:001">SM:001</option>
+                    <option value="SM:002">SM:002</option>
+                    <option value="SM:003">SM:003</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="order">
+                    รายละสินค้าที่ต้องการ (สีของกระโปรง : สีของริบบิ้น)
+                </label>
+                <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="order" name="order" type="text" placeholder="สีของกระโปรง : สีของริบบิ้น">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="product">
+                    เลือกประเภทสินค้า
+                </label>
+                <select
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="product" name="product" onchange="calculateTotal()" placeholder="ไซส์">
+                    <option value="">เลือกไซส์</option>
+                    <option value="150">เด็กอนุบาล - 150 บาท</option>
+                    <option value="180">เด็กประถม - 180 บาท</option>
+                    <option value="220">ผู้ใหญ่ - 220 บาท</option>
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="quantity">
+                    จำนวนสินค้า
+                </label>
+                <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="quantity" name="quantity" type="number" placeholder="กรอกจำนวนสินค้า" value="0" min="0" oninput="calculateTotal()">
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="totalPrece">
+                    ราคาสินค้าทั้งหมด
+                </label>
+                <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="totalPrece" name="totalPrece" type="text" placeholder="ราคาสินค้าทั้งหมด" readonly>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="address">
+                    ที่อยู่จัดส่ง
+                </label>
+                <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="address" name="address" type="text" placeholder="กรอกที่อยู่จัดส่ง">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="address">
+                    ช่องทางชำระเงิน
+                </label>
+                <h1 class="text-center text-xl text-gray-700 font-bold mb-2">ธนาคาร xxx <br /></h1>
+                <h2 class="text-2xl font-semibold mb-5 text-center">เลขที่บัญชี xxx-x-xxxxx-x</h1>
+
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" for="message">
+                    ฝากข้อความถึงผู้ขาย
+                </label>
+                <textarea
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="message" name="message" rows="4" placeholder="กรอกข้อความที่ต้องการแจ้ง"></textarea>
+            </div>
+            <div class="flex items-center justify-center mb-4">
+                <button
+                class="bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
+                type="submit">
+                Pre-Order โล้ดดดด
+                </button>
+            </div>
+        </form>  
+    </div>
+
+
+
+<script>
+    function calculateTotal() {
+        // รับราคาต่อหน่วยจากตัวเลือกที่เลือกในฟิลด์ select
+        const unitPrece = parseFloat(document.getElementById('product').value);
+
+        // รับค่าจำนวนสินค้าจากฟิลด์ input
+        const quantity = parseInt(document.getElementById('quantity').value);
+        
+        // ตรวจสอบว่ามีการกรอกจำนวนที่ถูกต้องหรือไม่
+        if (isNaN(quantity) || quantity < 0) {
+            document.getElementById('totalPrece').value = '';
+            return;
+        }
+
+        // คำนวณราคารวม
+        const totalPrece = unitPrece * quantity;
+
+        // แสดงราคารวมในฟิลด์ "ราคาสินค้าทั้งหมด"
+        document.getElementById('totalPrece').value = totalPrece.toFixed(2);
+    }
+</script>
+
+{% endblock %}

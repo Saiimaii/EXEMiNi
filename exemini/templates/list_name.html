@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}SaiiMaiiShop Admin{% endblock title %}
+
+{%  block content %}
+<div class="h-screen w-auto bg-white">
+    <div class="flex flex-col gap-4 items-center w-full h-full px-3 md:px-0">
+        <div class="shadow-lg rounded-lg overflow-hidden mx-3 md:mx-4 w-full bg-white">
+            <div class="overflow-x-auto">
+                <form method="POST" action="/list_name/">
+                    {% csrf_token %}
+                    <table class="w-full divide-y divide-gray-200 overflow-x-auto items-center">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                                    ลำดับ
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                                    ชื่อผู้ใช้
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                                    ชื่อผู้ลงทะเบียน
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                                    อีเมล
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                                    เวลาเข้าใช้งาน
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200 text-black">
+                        {% for list in all_list %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">                            
+                                    <div class="text-center text-lg text-gray-900">{{list.id}}</div>                            
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-center text-lg text-gray-900">{{list.username}}</div>                        
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-center text-lg text-gray-900">{{list.first_name}}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-center text-lg text-gray-900">{{list.email}}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-center text-lg text-gray-900">{{list.last_login}}</div>
+                                </td>
+                                {% comment %} <td class="px-6 py-4 whitespace-nowrap  text-lg font-medium">
+                                    <a href="/edit/{{datashop.id}}" class="text-indigo-600 hover:text-indigo-900 text-lg">ที่อยู่จัดส่ง</a>
+                                    <a href="/delete/{{datashop.id}}" class="ml-2 text-red-600 hover:text-red-900 text-lg">ยกเลิก</a>
+                                </td> {% endcomment %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

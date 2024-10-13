@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}SaiiMaiiShop Admin{% endblock title %}
+
+{% block content %}
+<div class="h-screen w-auto bg-white">
+    <div class="flex flex-col gap-4 items-center w-full h-full px-3 md:px-0">
+        <div class="shadow-lg rounded-lg overflow-hidden mx-3 md:mx-4 w-full bg-white">
+            <div class="overflow-x-auto">
+                <form method="POST" action="/update_status/">
+                    {% csrf_token %}
+                    <table class="min-w-full table-auto">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="px-6 py-3 text-center text-base font-medium text-gray-600 uppercase tracking-wider">วันที่ต้องการรับสินค้า</th>
+                                <th class="px-6 py-3 text-center text-base font-medium text-gray-600 uppercase tracking-wider">รหัสสินค้า</th>
+                                <th class="px-6 py-3 text-center text-base font-medium text-gray-600 uppercase tracking-wider">รายละเอียดสินค้า</th>
+                                <th class="px-6 py-3 text-center text-base font-medium text-gray-600 uppercase tracking-wider">ราคาสินค้า</th>
+                                <th class="px-6 py-3 text-center text-base font-medium text-gray-600 uppercase tracking-wider">จำนวนสินค้า</th>
+                                <th class="px-6 py-3 text-center text-base font-medium text-gray-600 uppercase tracking-wider">ยอดชำระ</th>
+                                <th class="px-6 py-3 text-center text-base font-medium text-gray-600 uppercase tracking-wider">ที่อยู่จัดส่ง</th>
+                                <th class="px-6 py-3 text-center text-base font-medium text-gray-600 uppercase tracking-wider">ข้อความถึงร้านค้า</th>
+                                <th class="px-6 py-3 text-center text-base font-medium text-gray-600 uppercase tracking-wider">การชำระเงิน</th>
+                                <th class="px-6 py-3 text-center text-base font-medium text-gray-600 uppercase tracking-wider">สถานะสินค้า</th>
+                                <th class="px-6 py-3 text-center text-base font-medium text-gray-600 uppercase tracking-wider">บันทึกการเปลี่ยน</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for dataall in all_order %}
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ dataall.datesend }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ dataall.num_order }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ dataall.order }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ dataall.product }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ dataall.quantity }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ dataall.totalPrece }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ dataall.address }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ dataall.message }}</td>
+                                    <td class="px-6 py-4">
+                                        <select name="payment_status_{{ dataall.id }}" class="form-select">
+                                            <option value="Checked" {% if dataall.payments_status == 'Checked' %}selected{% endif %}>รอทางร้านตรวจสอบ</option>
+                                            <option value="Pending" {% if dataall.payments_status == 'Pending' %}selected{% endif %}>รอการชำระเงิน</option>
+                                            <option value="Paid" {% if dataall.payments_status == 'Paid' %}selected{% endif %}>ชำระเงินเรียบร้อยแล้ว</option>
+                                        </select>
+                                    </td>
+                    
+                                    <!-- Dropdown สำหรับสถานะสินค้า -->
+                                    <td class="px-6 py-4">
+                                        <select name="product_status_{{ dataall.id }}" class="form-select">
+                                            <option value="Received" {% if dataall.products_status == 'Received' %}selected{% endif %}>รอกดรับสินค้า</option>
+                                            <option value="Processing" {% if dataall.products_status == "Processing" %}selected{% endif %}>กำลังจัดทำ</option>
+                                            <option value="Shipped" {% if dataall.products_status == 'Shipped' %}selected{% endif %}>จัดส่งเรียบร้อยแล้ว</option>
+                                        </select>
+                                    </td>
+                    
+                                    <!-- ปุ่มบันทึก -->
+                                    <td class="px-6 py-4">
+                                        <button type="submit" class="bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline">บันทึก</button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="flex items-center justify-center mb-4 mt-8">
+                        <button
+                            class="bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
+                            type="submit">
+                            บันทึกข้อมูล
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

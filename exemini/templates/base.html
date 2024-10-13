@@ -1,0 +1,255 @@
+{% load compress %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SaiiMaiiShop</title>
+
+        {% compress css %}
+        <link rel="stylesheet"
+            href="{% static 'src/output.css' %}">
+        {% endcompress %}
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+            @keyframes neon-pulse {
+                0%, 100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #00ffff, 0 0 35px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff, 0 0 75px #00ffff; }
+                50% { text-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 7px #fff, 0 0 10px #00ffff, 0 0 17px #00ffff, 0 0 20px #00ffff, 0 0 25px #00ffff, 0 0 37px #00ffff; }
+            }
+
+            .neon-text {
+                animation: neon-pulse 1.5s infinite alternate;
+            }
+
+            .bg-animated {
+                background: linear-gradient(-45deg, #000000, #1a1a1a, #000033, #003366);
+                background-size: 400% 400%;
+                animation: gradient 15s ease infinite;
+            }
+
+            @keyframes gradient {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+
+            .cyber-grid {
+                background-image: linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+                background-size: 20px 20px;
+                animation: cyber-grid-move 20s linear infinite;
+            }
+
+            @keyframes cyber-grid-move {
+                0% { background-position: 0 0; }
+                100% { background-position: 20px 20px; }
+            }
+
+            .nav-link {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .nav-link::before {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: #00ffff;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .nav-link:hover::before {
+                transform: translateX(0);
+            }
+
+            .nav-link::after {
+                content: attr(data-text);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transform: translateY(100%);
+                background: linear-gradient(to bottom, #00ffff, #0080ff);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                transition: transform 0.3s ease;
+            }
+
+            .nav-link:hover::after {
+                transform: translateY(0);
+            }
+
+            .glitch-effect {
+                position: relative;
+            }
+
+            .glitch-effect::before,
+            .glitch-effect::after {
+                content: attr(data-text);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0.8;
+            }
+
+            .glitch-effect::before {
+                left: 2px;
+                text-shadow: -2px 0 #ff00de;
+                clip: rect(24px, 550px, 90px, 0);
+                animation: glitch-anim 3s infinite linear alternate-reverse;
+            }
+
+            .glitch-effect::after {
+                left: -2px;
+                text-shadow: -2px 0 #00ffff;
+                clip: rect(85px, 550px, 140px, 0);
+                animation: glitch-anim 2s infinite linear alternate-reverse;
+            }
+
+            @keyframes glitch-anim {
+                0% { clip: rect(39px, 9999px, 71px, 0); }
+                20% { clip: rect(3px, 9999px, 5px, 0); }
+                40% { clip: rect(6px, 9999px, 38px, 0); }
+                60% { clip: rect(13px, 9999px, 43px, 0); }
+                80% { clip: rect(44px, 9999px, 93px, 0); }
+                100% { clip: rect(54px, 9999px, 47px, 0); }
+            }
+
+            #menu-toggle:checked ~ .menu-icon .hamburger {
+                transform: rotate(45deg);
+            }
+
+            #menu-toggle:checked ~ .menu-icon .hamburger::before {
+                transform: translateY(8px) rotate(90deg);
+            }
+
+            #menu-toggle:checked ~ .menu-icon .hamburger::after {
+                transform: translateY(-8px) rotate(90deg);
+            }
+
+            .hamburger,
+            .hamburger::before,
+            .hamburger::after {
+                content: '';
+                display: block;
+                background: #00ffff;
+                height: 3px;
+                width: 30px;
+                transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            }
+
+            .hamburger::before { transform: translateY(-8px); }
+            .hamburger::after { transform: translateY(8px); }
+
+            @media (max-width: 768px) {
+                .menu {
+                    position: fixed;
+                    top: 60px;
+                    left: 0;
+                    width: 100%;
+                    height: 0;
+                    background: rgba(0, 0, 0, 0.9);
+                    overflow: hidden;
+                    transition: height 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+                }
+
+                #menu-toggle:checked ~ .menu {
+                    height: calc(100vh - 60px);
+                }
+            }
+        </style>
+    </head>
+
+    <body class="bg-black text-white min-h-screen">
+        <nav class="bg-animated cyber-grid fixed w-full z-50">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center py-4">
+                    <a href="" class="text-2xl font-bold neon-text glitch-effect" data-text="SaiiMaiiShop">SaiiMaiiShop</a>
+                    <input type="checkbox" id="menu-toggle" class="hidden">
+                    <label for="menu-toggle" class="menu-icon cursor-pointer md:hidden">
+                        <span class="hamburger"></span>
+                    </label>
+                    <div id="navbarBasicExample" class="navbar-menu">
+                        <ul class="menu hidden md:flex md:items-center space-x-6">
+                            {% if user.is_superuser %}
+                            <li><a href="/" class="nav-link" data-text="Views Shop" aria-label="Views Shop">Views Shop</a></li>
+                            <li><a href="/all_order/" class="nav-link" data-text="All_order" aria-label="All Orders">All Orders</a></li>
+                            <li><a href="/list_name/" class="nav-link" data-text="List Name" aria-label="List Name">List Name</a></li>
+                            <li><a href="/chart_view/" class="nav-link" data-text="Chart Week" aria-label="Chart Week">Chart Week</a></li>
+                            <li><a href="/about/" class="nav-link" data-text="ME" aria-label="ME">ME</a></li>
+                            <li><a href="/logout/" class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-2 px-4 rounded hover:from-cyan-600 hover:to-blue-600 transition-all duration-300" aria-label="Logout">Logout</a></li>
+                            {% elif user.is_authenticated %}
+                            {% comment %} <div class="navbar-start">
+                                <a class="navbar-item" href="/">
+                                    Hollo, {{user.first_name}}
+                                </a>
+                            </div> {% endcomment %}
+                            <li><a href="/backend/" class="nav-link" data-text="Home" aria-label="Admin Home">Home</a></li>
+                            <li><a href="/contact/" class="nav-link" data-text="Contact" aria-label="Contact">Contact</a></li>
+                            <li><a href="/myorder/" class="nav-link" data-text="My order" aria-label="My Orders">My Orders</a></li>
+                            <li><a href="/about/" class="nav-link" data-text="about" aria-label="About">About</a></li>
+                            <li><a href="/logout/" class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-2 px-4 rounded hover:from-cyan-600 hover:to-blue-600 transition-all duration-300" aria-label="Logout">Logout</a></li>
+                            {% else %}
+                            <li><a href="/" class="nav-link" data-text="Home" aria-label="Home">Home</a></li>
+                            <li><a href="/contact/" class="nav-link" data-text="Contact" aria-label="Contact">Contact</a></li>
+                            <li><a href="/signup/" class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-2 px-4 rounded hover:from-cyan-600 hover:to-blue-600 transition-all duration-300" aria-label="Sign Up">Sign Up</a></li>
+                            <li><a href="/login/" class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-2 px-4 rounded hover:from-cyan-600 hover:to-blue-600 transition-all duration-300" aria-label="Login">Login</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                                          
+                </div>
+            </div>
+        </nav>
+
+        <main class="pt-20">
+            <!-- Your page content goes here -->
+            <div class="container mx-auto px-4 text-black">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </main>
+
+        <script>
+            const menuToggle = document.getElementById('menu-toggle');
+            const menu = document.querySelector('.menu');
+
+            menuToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    menu.classList.remove('hidden');
+                    menu.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'space-y-4');
+                } else {
+                    menu.classList.add('hidden');
+                    menu.classList.remove('flex', 'flex-col', 'items-center', 'justify-center', 'space-y-4');
+                }
+            });
+
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    menu.classList.remove('hidden', 'flex', 'flex-col', 'items-center', 'justify-center', 'space-y-4');
+                    menu.classList.add('md:flex', 'md:items-center');
+                    menuToggle.checked = false;
+                } else if (!menuToggle.checked) {
+                    menu.classList.add('hidden');
+                    menu.classList.remove('flex', 'flex-col', 'items-center', 'justify-center', 'space-y-4');
+                }
+            });
+        </script>
+            
+    </body>
+
+</html>

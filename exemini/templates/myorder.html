@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<form method="POST" action="/shop/">
+  {% csrf_token %}
+
+<table class="w-full divide-y divide-gray-200 overflow-x-auto items-center">
+    <thead class="bg-gray-50">
+        <tr>
+            <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                วันที่ต้องการรับสินค้า
+            </th>
+            <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                รหัสสินค้า
+            </th>
+            <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                รายละสินค้า
+            </th>
+            <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                ราคาสินค้า
+            </th>
+            <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                จำนวนสินค้า
+            </th>
+            <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                ยอดชำระ
+            </th>
+            <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                ที่อยู่จัดส่ง
+            </th>
+            <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                ข้อความถึงร้านค้า
+            </th>
+            <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                สถานะการชำระเงิน
+            </th>
+            <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                สถานะสินค้า
+            </th>
+            <th scope="col" class="px-6 py-3 text-center text-base font-medium text-gray-500 uppercase tracking-wider">
+                แก้ไข
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200 text-black">
+    {% for datashop in all_dataorder %}
+        <tr>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-lg text-gray-900">{{datashop.datesend}}</div>                        
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-lg text-gray-900">{{datashop.num_order}}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-lg text-gray-900">{{datashop.order}}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-lg text-gray-900">{{datashop.product}}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">                            
+                <div class="text-lg text-gray-900">{{datashop.quantity}}</div>                            
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-lg text-gray-900">{{datashop.totalPrece}}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-lg text-gray-900">{{datashop.address}}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">                                
+                <div class="text-lg text-gray-900">{{datashop.message}}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">                                
+                <div class="text-lg text-gray-900">{{datashop.payments_status}}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">                                
+                <div class="text-lg text-gray-900">{{datashop.products_status}}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap  text-lg font-medium">
+                <a href="/edit/{{datashop.id}}" class="text-indigo-600 hover:text-indigo-900 text-lg">ที่อยู่จัดส่ง</a>
+                <a href="/delete/{{datashop.id}}" class="ml-2 text-red-600 hover:text-red-900 text-lg">ยกเลิก</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
